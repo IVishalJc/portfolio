@@ -1,55 +1,55 @@
-import Reveal from "./Reveal";
+"use client";
+
+import { motion } from "framer-motion";
 import { experience } from "@/data/resume";
-import { Briefcase } from "lucide-react";
+import ScrambleText from "./ScrambleText";
 
 export default function Experience() {
   return (
-    <section id="experience" className="relative mx-auto max-w-5xl px-6 py-28">
-      <Reveal>
-        <p className="mb-3 font-mono text-sm text-cyan-300/80">03 · Experience</p>
-      </Reveal>
-      <Reveal delay={0.05}>
-        <h2 className="mb-14 text-3xl font-bold sm:text-4xl">
-          Where I&apos;ve shipped production AI.
-        </h2>
-      </Reveal>
+    <section id="experience" className="relative mx-auto max-w-6xl px-6 py-28">
+      <p className="font-mono text-xs tracking-[0.4em] text-neon-violet">
+        04 — TRACK RECORD
+      </p>
+      <h2 className="mt-4 font-display text-5xl font-extrabold uppercase tracking-tighter text-white sm:text-7xl">
+        <ScrambleText text="Where I've shipped" />
+      </h2>
 
-      <div className="relative space-y-10 border-l border-white/10 pl-8">
+      <div className="mt-16 space-y-5">
         {experience.map((job, i) => (
-          <Reveal key={job.role} delay={i * 0.08} className="relative">
-            <span className="absolute -left-[41px] top-1 flex h-7 w-7 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-cyan-400 text-white shadow-lg shadow-violet-500/30">
-              <Briefcase size={14} />
-            </span>
-
-            <div className="glass glow-border rounded-2xl p-6 sm:p-8">
-              <div className="flex flex-wrap items-baseline justify-between gap-2">
-                <h3 className="text-xl font-semibold text-white">{job.role}</h3>
-                {job.period && (
-                  <span className="font-mono text-xs text-white/40">{job.period}</span>
-                )}
+          <motion.div
+            key={job.role}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.7, delay: i * 0.1 }}
+            className="glow-border group relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] p-7 sm:p-10"
+          >
+            <div className="grid gap-8 lg:grid-cols-[1fr_1.6fr]">
+              <div>
+                <h3 className="font-display text-2xl font-bold uppercase tracking-tight text-white sm:text-3xl">
+                  {job.role}
+                </h3>
+                <p className="mt-2 neon-cyan text-sm">{job.company}</p>
+                <p className="mt-1 font-mono text-xs text-white/35">
+                  {job.location}
+                </p>
+                <p className="mt-5 inline-block rounded-full border border-white/12 px-3.5 py-1.5 font-mono text-[11px] tracking-wider text-white/55">
+                  {job.period}
+                </p>
               </div>
-              <p className="mt-1 text-sm text-cyan-300/70">{job.company}</p>
-              <p className="mt-4 text-white/60">{job.summary}</p>
 
-              <div className="mt-6 space-y-5">
-                {job.projects.map((proj) => (
-                  <div key={proj.title}>
-                    <h4 className="text-sm font-medium text-white/90">{proj.title}</h4>
-                    <ul className="mt-2 space-y-1.5">
-                      {proj.points.map((pt) => (
-                        <li
-                          key={pt}
-                          className="relative pl-4 text-sm leading-relaxed text-white/55 before:absolute before:left-0 before:top-[0.55em] before:h-1 before:w-1 before:rounded-full before:bg-cyan-400/70"
-                        >
-                          {pt}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+              <ul className="space-y-3.5">
+                {job.points.map((point) => (
+                  <li
+                    key={point}
+                    className="relative pl-6 leading-relaxed text-white/55 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-neon-cyan/70"
+                  >
+                    {point}
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
-          </Reveal>
+          </motion.div>
         ))}
       </div>
     </section>

@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Syne, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const sans = Space_Grotesk({
-  variable: "--font-sans",
+const syne = Syne({
+  variable: "--font-syne",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
+
+const grotesk = Space_Grotesk({
+  variable: "--font-grotesk",
   subsets: ["latin"],
 });
 
-const mono = JetBrains_Mono({
-  variable: "--font-mono",
+const jet = JetBrains_Mono({
+  variable: "--font-jet",
   subsets: ["latin"],
 });
 
@@ -22,12 +28,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${sans.variable} ${mono.variable} h-full antialiased`}
+      className={`${syne.variable} ${grotesk.variable} ${jet.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-background text-foreground">
-        <div className="noise-overlay" />
-        {children}
-      </body>
+      <body className="min-h-full bg-void text-[#eaeaf5]">{children}</body>
     </html>
   );
 }

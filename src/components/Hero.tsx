@@ -1,125 +1,161 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { ArrowDown, Mail } from "lucide-react";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
 import { profile } from "@/data/resume";
+import Magnetic from "./Magnetic";
 import { GithubIcon, LinkedinIcon } from "./icons";
 
-const badges = [
-  "Multi-Agent Orchestration",
-  "Hybrid Retrieval",
-  "Knowledge Graphs",
-  "LLM Evaluation",
-];
+function GlitchTitle({ text }: { text: string }) {
+  return (
+    <span className="relative inline-block">
+      <span
+        aria-hidden
+        className="rgb-left glitch-clip absolute inset-0 text-neon-cyan opacity-80 mix-blend-screen"
+      >
+        {text}
+      </span>
+      <span
+        aria-hidden
+        className="rgb-right glitch-clip absolute inset-0 text-neon-magenta opacity-80 mix-blend-screen"
+      >
+        {text}
+      </span>
+      <span className="relative text-white">{text}</span>
+    </span>
+  );
+}
 
 export default function Hero() {
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], [0, 160]);
+  const opacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
   return (
     <section
+      ref={ref}
       id="top"
-      className="relative flex min-h-screen flex-col items-center justify-center px-6 pt-24 text-center"
+      className="relative flex min-h-screen flex-col justify-center overflow-hidden px-6 pt-28 pb-20"
     >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.6 }}
-        className="glass mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs text-cyan-200/90"
-      >
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
-        </span>
-        Open to opportunities · {profile.location}
-      </motion.div>
+      {/* vertical side rails */}
+      <div className="pointer-events-none absolute left-5 top-1/2 hidden -translate-y-1/2 lg:block">
+        <p className="font-mono text-[10px] tracking-[0.4em] text-white/25 [writing-mode:vertical-rl]">
+          PORTFOLIO — TRANSMISSION 2026
+        </p>
+      </div>
+      <div className="pointer-events-none absolute right-5 top-1/2 hidden -translate-y-1/2 lg:block">
+        <p className="font-mono text-[10px] tracking-[0.4em] text-white/25 [writing-mode:vertical-rl]">
+          {profile.location.toUpperCase()}
+        </p>
+      </div>
 
-      <motion.h1
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-        className="max-w-4xl text-5xl font-bold leading-tight tracking-tight sm:text-6xl md:text-7xl"
-      >
-        Hi, I&apos;m{" "}
-        <span className="text-gradient">{profile.name}</span>
-      </motion.h1>
-
-      <motion.p
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-        className="mt-5 font-mono text-lg text-white/60 sm:text-xl"
-      >
-        {"// "}
-        {profile.title} — turning ambiguous problems into production AI systems
-      </motion.p>
-
-      <motion.p
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.4 }}
-        className="mt-6 max-w-2xl text-balance text-base text-white/50 sm:text-lg"
-      >
-        Part software engineer, part data scientist. I design the architecture,
-        ship the APIs, and prove every improvement with evaluation.
-      </motion.p>
-
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.55 }}
-        className="mt-8 flex flex-wrap items-center justify-center gap-2"
-      >
-        {badges.map((b) => (
-          <span
-            key={b}
-            className="glass rounded-full px-3.5 py-1.5 text-xs text-white/70"
-          >
-            {b}
+      <motion.div style={{ y, opacity }} className="mx-auto w-full max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 2.9 }}
+          className="mb-8 flex flex-wrap items-center gap-4 font-mono text-[11px] tracking-[0.25em] text-white/50"
+        >
+          <span className="flex items-center gap-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-neon-lime [animation:pulse-dot_1.6s_ease-in-out_infinite]" />
+            ON AIR
           </span>
-        ))}
-      </motion.div>
+          <span className="h-px w-10 bg-white/20" />
+          <span>{profile.title.toUpperCase()}</span>
+          <span className="h-px w-10 bg-white/20" />
+          <span>EST. 2024</span>
+        </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.7 }}
-        className="mt-10 flex items-center gap-4"
-      >
-        <a
-          href="#experience"
-          className="glow-border glass-strong rounded-full px-6 py-3 text-sm font-medium text-white transition hover:scale-105"
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 3, ease: [0.22, 1, 0.36, 1] }}
+          className="font-display font-extrabold uppercase leading-[0.82] tracking-tighter"
         >
-          View my work
-        </a>
-        <a
-          href="mailto:ivishaljc20@gmail.com"
-          className="flex items-center gap-2 rounded-full px-6 py-3 text-sm font-medium text-white/70 transition hover:text-white"
+          <span className="block text-[clamp(2.75rem,9.5vw,8rem)]">
+            <GlitchTitle text="Vishal JC" />
+          </span>
+          <span className="mt-1 block text-stroke text-[clamp(2.25rem,7.8vw,6.5rem)]">
+            AI Engineer
+          </span>
+        </motion.h1>
+
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, delay: 3.25 }}
+          className="mt-9 grid gap-8 md:grid-cols-[1.2fr_1fr] md:items-end"
         >
-          <Mail size={16} /> Contact
-        </a>
-      </motion.div>
+          <p className="max-w-xl text-lg leading-relaxed text-white/60">
+            I build production AI systems end to end —{" "}
+            <span className="neon-cyan">hybrid retrieval</span>,{" "}
+            <span className="neon-magenta">multi-agent orchestration</span>, and{" "}
+            <span className="neon-lime">evaluation</span> that proves every gain
+            instead of assuming it.
+          </p>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
-        className="mt-10 flex items-center gap-5 text-white/40"
-      >
-        <a href="mailto:ivishaljc20@gmail.com" className="transition hover:text-cyan-300" aria-label="Email">
-          <Mail size={18} />
-        </a>
-        <a href="https://github.com" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300" aria-label="GitHub">
-          <GithubIcon size={18} />
-        </a>
-        <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="transition hover:text-cyan-300" aria-label="LinkedIn">
-          <LinkedinIcon size={18} />
-        </a>
-      </motion.div>
+          <div className="flex flex-wrap items-center gap-4 md:justify-end">
+            <Magnetic>
+              <a
+                href="#work"
+                className="glow-border glass-strong inline-flex items-center gap-3 rounded-full px-7 py-4 font-mono text-xs tracking-[0.2em] text-white"
+              >
+                VIEW THE WORK
+                <span className="text-neon-cyan">→</span>
+              </a>
+            </Magnetic>
 
-      <motion.div
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-10 text-white/30"
-      >
-        <ArrowDown size={20} />
+            <Magnetic>
+              <a
+                href={`mailto:${profile.email}`}
+                className="inline-flex items-center rounded-full border border-white/15 px-7 py-4 font-mono text-xs tracking-[0.2em] text-white/70 transition-colors hover:border-neon-magenta/60 hover:text-white"
+              >
+                GET IN TOUCH
+              </a>
+            </Magnetic>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 3.5 }}
+          className="mt-10 flex items-center justify-between border-t border-white/10 pt-5"
+        >
+          <div className="flex items-center gap-5 text-white/35">
+            <a
+              href="https://github.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="GitHub"
+              className="transition-colors hover:text-neon-cyan"
+            >
+              <GithubIcon size={18} />
+            </a>
+            <a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="LinkedIn"
+              className="transition-colors hover:text-neon-cyan"
+            >
+              <LinkedinIcon size={18} />
+            </a>
+          </div>
+
+          <motion.p
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 2.2, repeat: Infinity }}
+            className="font-mono text-[10px] tracking-[0.4em] text-white/40"
+          >
+            SCROLL ↓
+          </motion.p>
+        </motion.div>
       </motion.div>
     </section>
   );
